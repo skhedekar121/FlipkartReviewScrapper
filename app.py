@@ -231,14 +231,27 @@ def create_figure(file_path,x_name,y_name):
             df[y_name] = df[y_name].apply(rem_symbol)
             df[y_name] = df[y_name].astype('int64')
 
-        fig = Figure(figsize=(15, 5))
+        fig = Figure(figsize=(25, 15))
         plt1 = fig.add_subplot(1, 2, 1)
         xs = df[x_name]
         ys = df[y_name]
+        #ys = [1,2,3,4,5]
         plt1.scatter(xs, ys)
+        plt1.title.set_text("Product vs Ratings Scatter Plot")
+        plt1.set_xlabel("Product Names")
+        plt1.set_ylabel("Ratings")
         plt2 = fig.add_subplot(1, 2, 2)
-        plt2.hist(df[[y_name]])
-
+        df_p = df.groupby(x_name).count().reset_index()
+        clg.log(f"grouped df columns list - {df_p.columns}")
+        plt2.title.set_text("Percentage of Ratings per Product")
+        plt2.pie(df_p[y_name],labels = df_p[x_name],autopct='%1.1f%%',counterclock=False)
+        #plt2.pie(ys,labels = xs)
+        #plt3 = fig.add_subplot(1, 3, 3)
+        #plt3.title.set_text("Product vs Ratings Line Chart")
+        #plt3.hist(df_p[[y_name]])
+        #for pr in df_p[[x_name]]:
+            #plt3.plot(df[df[x_name] == pr][y_name])
+	
         return fig
 
     except Exception as e:
